@@ -16,7 +16,7 @@ Available in CSV, Parquet, and JSON.
 
 ## Access
 
-Contact **ben@dwellir.com** with:
+Contact **support@dwellir.com** or reach out via [Telegram](https://t.me/dwellir) with:
 - Which data products you need
 - Date ranges
 - Preferred format
