@@ -1,20 +1,23 @@
 # Hyperliquid Historical Data
 
-Dwellir hosts Hyperliquid archival data in S3.
+Dwellir offers three historical data products for Hyperliquid. Access is not self-service — contact Dwellir to request data.
 
-## Endpoint
+## Data Products
 
-```
-Endpoint: https://hyperliquid-archival-data.n.dwellir.com
-Bucket: hyperliquid-historical-data
-```
+| Product | Description | Available From | Best For |
+|---------|-------------|---------------|----------|
+| **Archival Data** | Complete raw data in native Hyperliquid formats — full blockchain state, transactions, trade fills with P&L | Jan 2025 (replica_cmds), Mar 2025 (fills) | Compliance, protocol research, full state replay |
+| **OHLCV Data** | Pre-aggregated candlestick data for all perpetual markets, intervals from 1 second to 1 day | — | Charting, technical analysis, strategy backtesting |
+| **Tick Data** | Individual trade executions with millisecond precision — price, size, side, trader addresses | Jul 2025 | Backtesting, slippage analysis, execution modeling |
 
-## Available Data
+## Formats
 
-| Path | Description |
-|------|-------------|
-| `node_fills/hourly/` | Fill data by hour |
-| `node_fills_by_block/hourly/` | Fills organized by block |
-| `node_trades/hourly/` | Trade data by hour |
+Available in CSV, Parquet, and JSON.
 
-Files are compressed with LZ4. Bandwidth limit: 500 Mbit shared.
+## Access
+
+Contact **ben@dwellir.com** with:
+- Which data products you need
+- Date ranges
+- Preferred format
+- Intended use case
