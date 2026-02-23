@@ -1,7 +1,7 @@
 ---
 name: hyperliquid
 description: >
-  Hyperliquid L1 reference for Dwellir endpoints — HyperEVM JSON-RPC, Info API proxy,
+  Hyperliquid L1 reference for Dwellir endpoints: HyperEVM JSON-RPC, Info API proxy,
   gRPC L1 streaming, order book WebSocket, dedicated nodes, and trading patterns.
   Covers HyperCore trading layer, HyperEVM smart contracts (chain ID 999),
   market data queries, perpetuals metadata, spot markets, and best practices.
@@ -14,20 +14,20 @@ description: >
 
 # Hyperliquid via Dwellir
 
-Hyperliquid is a purpose-built L1 blockchain optimized for trading. Dwellir runs its own Hyperliquid nodes and offers infrastructure beyond standard RPC: a custom gRPC gateway for Hypercore data, a real-time order book server, and a filtering Info API proxy — with edge servers in Singapore and Tokyo.
+Hyperliquid is a purpose-built L1 blockchain optimized for trading. Dwellir runs its own Hyperliquid nodes and offers infrastructure beyond standard RPC: a custom gRPC gateway for Hypercore data, a real-time order book server, and a filtering Info API proxy, with edge servers in Singapore and Tokyo.
 
 ## How Hyperliquid Works
 
 Hyperliquid has two layers:
 
-**HyperCore** — The native trading layer. Fully on-chain perpetual futures and spot order books. Every order, cancellation, trade, and liquidation settles within one block. Handles ~200,000 orders/second with sub-second finality via HyperBFT consensus.
+**HyperCore** is the native trading layer. Fully on-chain perpetual futures and spot order books. Every order, cancellation, trade, and liquidation settles within one block. Handles ~200,000 orders/second with sub-second finality via HyperBFT consensus.
 
-**HyperEVM** — A general-purpose EVM smart contract layer that runs alongside HyperCore. Developers can deploy Solidity contracts that interact with HyperCore's liquidity. Chain ID: **999**. Native gas token: **HYPE**.
+**HyperEVM** is a general-purpose EVM smart contract layer that runs alongside HyperCore. Developers can deploy Solidity contracts that interact with HyperCore's liquidity. Chain ID: **999**. Native gas token: **HYPE**.
 
 Key properties:
-- All order books are fully on-chain — no off-chain matching
+- All order books are fully on-chain (no off-chain matching)
 - Sub-second block times with one-block finality
-- Perpetuals support up to 40x leverage (BTC); most assets 3–10x
+- Perpetuals support up to 40x leverage (BTC); most assets 3-10x
 - Native spot trading with HIP-3 DEX deployment
 
 ## What Dwellir Provides
@@ -46,9 +46,9 @@ For current pricing, features, and service details, see [Dwellir Hyperliquid doc
 
 ### What Dwellir Does NOT Proxy
 
-**Exchange API** — Order placement, cancellation, transfers, and other write operations require EIP-712 signatures and go directly to `api.hyperliquid.xyz/exchange`. See [native-api.md](references/native-api.md).
+**Exchange API**: Order placement, cancellation, transfers, and other write operations require EIP-712 signatures and go directly to `api.hyperliquid.xyz/exchange`. See [native-api.md](references/native-api.md).
 
-**Native WebSocket** — Hyperliquid's subscription WebSocket (`wss://api.hyperliquid.xyz/ws`) for user events, trades, and candles is separate from Dwellir's Orderbook WebSocket. See [native-api.md](references/native-api.md).
+**Native WebSocket**: Hyperliquid's subscription WebSocket (`wss://api.hyperliquid.xyz/ws`) for user events, trades, and candles is separate from Dwellir's Orderbook WebSocket. See [native-api.md](references/native-api.md).
 
 ### Read vs Write Architecture
 
@@ -94,17 +94,17 @@ Contact sales or subscribe via [dashboard.dwellir.com](https://dashboard.dwellir
 
 ## Best Practices
 
-1. **Use Dwellir for reads, Hyperliquid native for writes** — Dwellir provides the data infrastructure; order placement requires signatures and goes through `api.hyperliquid.xyz/exchange`.
+1. **Use Dwellir for reads, Hyperliquid native for writes.** Dwellir provides the data infrastructure; order placement requires signatures and goes through `api.hyperliquid.xyz/exchange`.
 
-2. **Use the gRPC gateway for latency-sensitive streaming** — the gRPC endpoint reads from disk and has lower latency than HTTP polling the Info API.
+2. **Use the gRPC gateway for latency-sensitive streaming.** The gRPC endpoint reads from disk and has lower latency than HTTP polling the Info API.
 
-3. **Use Dwellir's Orderbook WebSocket for book data** — it's optimized for order book delivery with edge servers in Singapore and Tokyo.
+3. **Use Dwellir's Orderbook WebSocket for book data.** It's optimized for order book delivery with edge servers in Singapore and Tokyo.
 
-4. **Batch Info API queries** — fetch combined endpoints like `metaAndAssetCtxs` (via public API) rather than per-asset queries. Check [Info API docs](https://www.dwellir.com/docs/hyperliquid/info-endpoint) for which types are available on the Dwellir proxy vs public endpoint.
+4. **Batch Info API queries.** Fetch combined endpoints like `metaAndAssetCtxs` (via public API) rather than per-asset queries. Check [Info API docs](https://www.dwellir.com/docs/hyperliquid/info-endpoint) for which types are available on the Dwellir proxy vs public endpoint.
 
-5. **Cache metadata** — `meta`, `spotMeta`, and `perpDexs` are semi-static. Cache for 1-5 minutes.
+5. **Cache metadata.** `meta`, `spotMeta`, and `perpDexs` are semi-static. Cache for 1-5 minutes.
 
-6. **Use `l2Book` via Info API for snapshots, Orderbook WS for streaming** — the Info API gives point-in-time snapshots; the Orderbook WebSocket gives continuous updates.
+6. **Use `l2Book` via Info API for snapshots, Orderbook WS for streaming.** The Info API gives point-in-time snapshots; the Orderbook WebSocket gives continuous updates.
 
 ## Documentation Links
 

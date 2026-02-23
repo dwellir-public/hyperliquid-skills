@@ -1,6 +1,6 @@
 # Hyperliquid Historical Data
 
-Dwellir offers historical data products for Hyperliquid. Access is not self-service — contact Dwellir to request data.
+Dwellir offers historical data products for Hyperliquid. Access is not self-service. Contact Dwellir to request data.
 
 **For current data products, formats, and pricing, see [Dwellir Historical Data docs](https://www.dwellir.com/docs/hyperliquid/historical-data).**
 
@@ -8,9 +8,9 @@ Dwellir offers historical data products for Hyperliquid. Access is not self-serv
 
 | Product | Description | Available From | Best For |
 |---------|-------------|---------------|----------|
-| **Archival Data** | Complete raw data in native Hyperliquid formats — full blockchain state, transactions, trade fills with P&L | Jan 2025 (replica_cmds), Mar 2025 (fills) | Compliance, protocol research, full state replay |
-| **OHLCV Data** | Pre-aggregated candlestick data for all perpetual markets, intervals from 1 second to 1 day | — | Charting, technical analysis, strategy backtesting |
-| **Tick Data** | Individual trade executions with millisecond precision — price, size, side, trader addresses | Jul 2025 | Backtesting, slippage analysis, execution modeling |
+| **Archival Data** | Complete raw data in native Hyperliquid formats: full blockchain state, transactions, trade fills with P&L | Jan 2025 (replica_cmds), Mar 2025 (fills) | Compliance, protocol research, full state replay |
+| **OHLCV Data** | Pre-aggregated candlestick data for all perpetual markets, intervals from 1 second to 1 day | - | Charting, technical analysis, strategy backtesting |
+| **Tick Data** | Individual trade executions with millisecond precision: price, size, side, trader addresses | Jul 2025 | Backtesting, slippage analysis, execution modeling |
 
 ## Formats
 

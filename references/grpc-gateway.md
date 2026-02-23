@@ -13,7 +13,7 @@ Service: hyperliquid_l1_gateway.v1.HyperLiquidL1Gateway
 
 ## Available Methods
 
-The gRPC gateway exposes both streaming and unary (point-in-time) methods. Check the [full docs](https://www.dwellir.com/docs/hyperliquid/grpc) for the current method list — the service expands over time.
+The gRPC gateway exposes both streaming and unary (point-in-time) methods. Check the [full docs](https://www.dwellir.com/docs/hyperliquid/grpc) for the current method list. The service expands over time.
 
 | Method | Type | Description |
 |--------|------|-------------|

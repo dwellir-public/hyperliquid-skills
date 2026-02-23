@@ -1,6 +1,6 @@
 # Orderbook WebSocket
 
-Real-time L2 order book data served by Dwellir's order book server, which reads Hypercore data directly from disk. **WSS only** — HTTP requests are not supported.
+Real-time L2 order book data served by Dwellir's order book server, which reads Hypercore data directly from disk. WSS only; HTTP requests are not supported.
 
 **For current pricing, subscription types, and full documentation, see [Dwellir Order Book Server docs](https://www.dwellir.com/docs/hyperliquid/order-book-server).**
 
@@ -9,9 +9,9 @@ Real-time L2 order book data served by Dwellir's order book server, which reads 
 | Feature | Dwellir Orderbook | Public Hyperliquid WS |
 |---------|-------------------|----------------------|
 | **Book depth** | Up to **100 levels** per side (configurable via `nLevels`) | Max 20 levels per side |
-| **Market coverage** | Perpetuals, spot (`@{index}`), and HIP-3 DEX tokens | Same — perpetuals, spot, and HIP-3 |
+| **Market coverage** | Perpetuals, spot (`@{index}`), and HIP-3 DEX tokens | Same: perpetuals, spot, and HIP-3 |
 | **Rate limits** | API key-based, no IP limits | Introducing IP-based rate limits |
-| **L4 full book** | Yes — complete order-level diffs | Not available on public WS |
+| **L4 full book** | Yes, complete order-level diffs | Not available on public WS |
 | **Infrastructure** | Dedicated edge servers (Singapore, Tokyo) | Shared public endpoint |
 
 ## Endpoint
@@ -113,7 +113,7 @@ ws.on('message', (data) => {
 
 ## Use Cases
 
-- Market making — 100-level depth gives full picture of liquidity
-- Arbitrage — compare order books across venues with deeper data
-- Liquidity analysis — track depth changes across spot, perp, and HIP-3 markets
-- Trading signals — detect large order placement/removal deeper in the book
+- Market making: 100-level depth gives full picture of liquidity
+- Arbitrage: compare order books across venues with deeper data
+- Liquidity analysis: track depth changes across spot, perp, and HIP-3 markets
+- Trading signals: detect large order placement/removal deeper in the book

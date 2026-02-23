@@ -1,6 +1,6 @@
 # Info API Proxy (Base Plan)
 
-Dwellir proxies a subset of Hyperliquid's `/info` endpoint through a filtering REST server. This validates requests and blocks certain high-risk query types (e.g., `fileSnapshot` is restricted on lower-tier plans). Not all Info API query types are supported — unsupported types return HTTP 422. For unsupported types, fall back to the public endpoint at `https://api.hyperliquid.xyz/info`.
+Dwellir proxies a subset of Hyperliquid's `/info` endpoint through a filtering REST server. This validates requests and blocks certain high-risk query types (e.g., `fileSnapshot` is restricted on lower-tier plans). Not all Info API query types are supported; unsupported types return HTTP 422. For unsupported types, fall back to the public endpoint at `https://api.hyperliquid.xyz/info`.
 
 **For the current list of supported query types, see [Dwellir Info API docs](https://www.dwellir.com/docs/hyperliquid/info-endpoint).** The supported types change over time as Dwellir expands proxy coverage.
 
@@ -228,7 +228,7 @@ Types that typically work on the proxy include: user account queries (`clearingh
 ### Market Data Dashboard
 
 ```javascript
-// allMids, metaAndAssetCtxs, and l2Book are not on the Dwellir proxy — use public endpoint
+// allMids, metaAndAssetCtxs, and l2Book are not on the Dwellir proxy - use public endpoint
 const HL_INFO = 'https://api.hyperliquid.xyz/info';
 const post = (body) => fetch(HL_INFO, {
   method: 'POST',
@@ -251,7 +251,7 @@ console.log(`BTC book: ${book.levels[0].length} bid levels`);
 ### Funding Rate Monitor
 
 ```javascript
-// predictedFundings is not proxied — use public endpoint
+// predictedFundings is not proxied - use public endpoint
 const predictions = await fetch('https://api.hyperliquid.xyz/info', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },

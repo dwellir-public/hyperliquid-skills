@@ -1,6 +1,6 @@
 # Hyperliquid Native API (Not Dwellir)
 
-These endpoints are operated by Hyperliquid directly. They are documented here for completeness — a typical application uses Dwellir for reading data and these native endpoints for writing.
+These endpoints are operated by Hyperliquid directly. They are documented here for completeness. A typical application uses Dwellir for reading data and these native endpoints for writing.
 
 ## Exchange API (Order Placement)
 
