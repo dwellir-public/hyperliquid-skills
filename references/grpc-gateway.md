@@ -1,8 +1,8 @@
-# L1 gRPC Gateway (Premium — $299/mo)
+# L1 gRPC Gateway
 
-Low-latency gRPC streaming from the Hyperliquid L1. This is a [Dwellir-built gateway](https://github.com/dwellir-public/hyperliquid-l1-gateway) that reads Hypercore data directly from disk and serves it via gRPC. Data not available through the native Info API (like raw block data and fill streams) is accessible here.
+Low-latency gRPC streaming from the Hyperliquid L1. This is a Dwellir-built gateway that reads Hypercore data directly from disk and serves it via gRPC. Data not available through the native Info API (like raw block data and fill streams) is accessible here.
 
-3-day free trial available.
+**For current pricing, available methods, and full documentation, see [Dwellir gRPC API docs](https://www.dwellir.com/docs/hyperliquid/grpc).**
 
 ## Endpoint
 
@@ -13,11 +13,18 @@ Service: hyperliquid_l1_gateway.v1.HyperLiquidL1Gateway
 
 ## Available Methods
 
+The gRPC gateway exposes both streaming and unary (point-in-time) methods. Check the [full docs](https://www.dwellir.com/docs/hyperliquid/grpc) for the current method list — the service expands over time.
+
 | Method | Type | Description |
 |--------|------|-------------|
-| `GetOrderBookSnapshot` | Unary | Order book snapshot at a given timestamp |
 | `StreamBlocks` | Server streaming | Real-time block data from a timestamp |
-| `StreamBlockFills` | Server streaming | Order fill executions in real-time |
+| `StreamFills` | Server streaming | Order fill executions in real-time |
+| `StreamOrderbookSnapshots` | Server streaming | Real-time order book snapshots |
+| `GetBlock` | Unary | Block at a specific height or timestamp |
+| `GetFills` | Unary | Fill data at a specific point in time |
+| `GetOrderBookSnapshot` | Unary | Order book snapshot at a given timestamp |
+
+Data retention: 24 hours of historical data.
 
 ## Connection
 

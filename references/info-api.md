@@ -1,12 +1,24 @@
 # Info API Proxy (Base Plan)
 
-Dwellir proxies Hyperliquid's `/info` endpoint through a [filtering REST server](https://github.com/dwellir-public/hyperliquid-rest-server). This validates requests and blocks certain high-risk query types (e.g., `fileSnapshot` is restricted on lower-tier plans).
+Dwellir proxies a subset of Hyperliquid's `/info` endpoint through a filtering REST server. This validates requests and blocks certain high-risk query types (e.g., `fileSnapshot` is restricted on lower-tier plans). Not all Info API query types are supported — unsupported types return HTTP 422. For unsupported types, fall back to the public endpoint at `https://api.hyperliquid.xyz/info`.
+
+**For the current list of supported query types, see [Dwellir Info API docs](https://www.dwellir.com/docs/hyperliquid/info-endpoint).** The supported types change over time as Dwellir expands proxy coverage.
 
 ## Endpoint
 
+Two authentication methods are supported (both equivalent):
+
+**Path-based auth (API key in URL):**
 ```
-POST https://api-hyperliquid-mainnet.n.dwellir.com/{API_KEY}/info
+POST https://api-hyperliquid-mainnet-info.n.dwellir.com/{API_KEY}/info
 Content-Type: application/json
+```
+
+**Header-based auth (recommended by Dwellir docs):**
+```
+POST https://api-hyperliquid-mainnet-info.n.dwellir.com/info
+Content-Type: application/json
+X-Api-Key: {API_KEY}
 ```
 
 All Info API requests use `POST` with a JSON body containing a `type` field.
@@ -15,21 +27,23 @@ All Info API requests use `POST` with a JSON body containing a `type` field.
 
 ### Get All Mid Prices
 
-```javascript
-const DWELLIR_INFO = `https://api-hyperliquid-mainnet.n.dwellir.com/${process.env.DWELLIR_API_KEY}/info`;
+**Note:** `allMids` is not supported on the Dwellir proxy. Use the public endpoint.
 
-const mids = await fetch(DWELLIR_INFO, {
+```javascript
+const mids = await fetch('https://api.hyperliquid.xyz/info', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({ type: 'allMids' }),
 }).then(r => r.json());
-// { "BTC": "113377.0", "ETH": "3245.5", "HYPE": "28.4", ... }
+// { "BTC": "66867.5", "ETH": "1935.9", "HYPE": "28.4", ... }
 ```
 
 ### Get Order Book Snapshot
 
+**Note:** `l2Book` is not supported on the Dwellir proxy. Use the public endpoint.
+
 ```javascript
-const book = await fetch(DWELLIR_INFO, {
+const book = await fetch('https://api.hyperliquid.xyz/info', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({
@@ -43,8 +57,10 @@ const book = await fetch(DWELLIR_INFO, {
 
 ### Get Candle Data
 
+**Note:** `candleSnapshot` is not supported on the Dwellir proxy. Use the public endpoint.
+
 ```javascript
-const candles = await fetch(DWELLIR_INFO, {
+const candles = await fetch('https://api.hyperliquid.xyz/info', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({
@@ -64,8 +80,10 @@ const candles = await fetch(DWELLIR_INFO, {
 
 ### Universe & Asset Contexts (Funding, OI, Volume)
 
+**Note:** `metaAndAssetCtxs` is not supported on the Dwellir proxy. Use the public endpoint.
+
 ```javascript
-const [meta, assetCtxs] = await fetch(DWELLIR_INFO, {
+const [meta, assetCtxs] = await fetch('https://api.hyperliquid.xyz/info', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({ type: 'metaAndAssetCtxs' }),
@@ -76,8 +94,10 @@ const [meta, assetCtxs] = await fetch(DWELLIR_INFO, {
 
 ### Funding Rate History
 
+**Note:** `fundingHistory` is not supported on the Dwellir proxy. Use the public endpoint.
+
 ```javascript
-const history = await fetch(DWELLIR_INFO, {
+const history = await fetch('https://api.hyperliquid.xyz/info', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({
@@ -91,19 +111,24 @@ const history = await fetch(DWELLIR_INFO, {
 
 ### Predicted Funding Rates (Cross-Venue)
 
+**Note:** `predictedFundings` is not supported on the Dwellir proxy (returns 422). Use the public endpoint.
+
 ```javascript
-const predictions = await fetch(DWELLIR_INFO, {
+const predictions = await fetch('https://api.hyperliquid.xyz/info', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({ type: 'predictedFundings' }),
 }).then(r => r.json());
-// Predicted rates across Hyperliquid, Binance, Bybit, etc.
+// Returns array of [coin, venues] tuples:
+// [["BTC", [["HlPerp", { fundingRate, nextFundingTime, fundingIntervalHours }], ["BinPerp", {...}]]], ...]
 ```
 
 ## Spot Metadata
 
+**Note:** `spotMetaAndAssetCtxs` is not supported on the Dwellir proxy. Use the public endpoint. For just the metadata (without live contexts), `spotMeta` works on the proxy.
+
 ```javascript
-const [meta, assetCtxs] = await fetch(DWELLIR_INFO, {
+const [meta, assetCtxs] = await fetch('https://api.hyperliquid.xyz/info', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({ type: 'spotMetaAndAssetCtxs' }),
@@ -114,11 +139,13 @@ const [meta, assetCtxs] = await fetch(DWELLIR_INFO, {
 
 ## User Account Queries
 
-These require knowing the user's address (blockchain data is public).
+These require knowing the user's address (blockchain data is public). The types below work on the Dwellir proxy.
 
 ### Perpetual Positions & Margin
 
 ```javascript
+const DWELLIR_INFO = `https://api-hyperliquid-mainnet-info.n.dwellir.com/${process.env.DWELLIR_API_KEY}/info`;
+
 const state = await fetch(DWELLIR_INFO, {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
@@ -152,8 +179,10 @@ const orders = await fetch(DWELLIR_INFO, {
 
 ### User Fills / Trade History
 
+**Note:** `userFills` is not supported on the Dwellir proxy. Use the public endpoint.
+
 ```javascript
-const fills = await fetch(DWELLIR_INFO, {
+const fills = await fetch('https://api.hyperliquid.xyz/info', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({ type: 'userFills', user: '0x...' }),
@@ -163,8 +192,10 @@ const fills = await fetch(DWELLIR_INFO, {
 
 ### Order Status
 
+**Note:** `orderStatus` is not supported on the Dwellir proxy. Use the public endpoint.
+
 ```javascript
-const result = await fetch(DWELLIR_INFO, {
+const result = await fetch('https://api.hyperliquid.xyz/info', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({ type: 'orderStatus', user: '0x...', oid: 91490942 }),
@@ -175,46 +206,13 @@ const result = await fetch(DWELLIR_INFO, {
 
 ## Available Query Types
 
-All of these are available through Dwellir's Info API proxy unless noted.
+**For the definitive list of supported types, see [Dwellir Info API docs](https://www.dwellir.com/docs/hyperliquid/info-endpoint).** The proxy coverage expands over time.
 
-| Type | Description | Risk Level |
-|------|-------------|------------|
-| `meta` | Perpetuals metadata (universe, margin tables) | LOW |
-| `spotMeta` | Spot token metadata and trading pairs | LOW |
-| `metaAndAssetCtxs` | Combined perp metadata + live market data | LOW |
-| `spotMetaAndAssetCtxs` | Combined spot metadata + live market data | LOW |
-| `exchangeStatus` | Exchange status with L1 timestamp | LOW |
-| `allMids` | Mid prices for all coins | LOW |
-| `l2Book` | Order book snapshot (20 levels/side) | LOW |
-| `candleSnapshot` | OHLCV candle data (up to 5000 candles) | LOW |
-| `clearinghouseState` | User perp positions and margin | MEDIUM |
-| `spotClearinghouseState` | User spot balances | MEDIUM |
-| `openOrders` | User's active orders | MEDIUM |
-| `frontendOpenOrders` | Active orders with extra metadata | MEDIUM |
-| `orderStatus` | Single order status by ID | MEDIUM |
-| `userFills` | User fill history (max 2000) | MEDIUM |
-| `userFillsByTime` | Paginated fills by time range | MEDIUM |
-| `historicalOrders` | Recent order history (max 2000) | MEDIUM |
-| `userFunding` | User funding payment history | MEDIUM |
-| `userFees` | Fee schedule, volume, discounts | MEDIUM |
-| `userRateLimit` | API rate limit status | LOW |
-| `fundingHistory` | Historical funding rates for a coin | LOW |
-| `predictedFundings` | Predicted funding across venues | LOW |
-| `activeAssetData` | User leverage, max trade sizes per coin | MEDIUM |
-| `delegations` | User staking delegations | MEDIUM |
-| `delegatorSummary` | Staking summary | LOW |
-| `subAccounts` | User sub-account list | MEDIUM-HIGH |
-| `vaultDetails` | Vault info, followers, P&L | LOW |
-| `userVaultEquities` | User's vault deposits | MEDIUM |
-| `portfolio` | User P&L history (day/week/month/all) | MEDIUM |
-| `referral` | Referral rewards and status | MEDIUM |
-| `maxBuilderFee` | Builder fee approval check | LOW |
-| `perpDexs` | All HIP-3 perpetual DEXes | LOW |
-| `validatorL1Votes` | Validator governance votes | LOW |
-| `borrowLendUserState` | User borrow/lend positions | MEDIUM |
-| `allBorrowLendReserveStates` | All reserve interest rates | LOW |
-| `tokenDetails` | Token supply and deployment info | LOW |
-| `fileSnapshot` | **Restricted on Free/Starter plans** — full L4 order book dump | CRITICAL |
+**General rule:** If a type returns HTTP 422 on the Dwellir proxy, fall back to the public endpoint at `https://api.hyperliquid.xyz/info`.
+
+Types that typically work on the proxy include: user account queries (`clearinghouseState`, `spotClearinghouseState`, `openOrders`, `frontendOpenOrders`, `userFees`, `userRateLimit`), metadata (`meta`, `spotMeta`, `exchangeStatus`), staking (`delegations`), and several others. Types that typically require the public endpoint include: market data aggregates (`allMids`, `metaAndAssetCtxs`, `l2Book`, `candleSnapshot`), historical queries (`userFills`, `fundingHistory`, `historicalOrders`), and portfolio/referral data.
+
+`fileSnapshot` (full L4 order book dump) is restricted on lower-tier plans and returns HTTP 403.
 
 ## Coin Naming Conventions
 
@@ -230,27 +228,18 @@ All of these are available through Dwellir's Info API proxy unless noted.
 ### Market Data Dashboard
 
 ```javascript
-const DWELLIR_INFO = `https://api-hyperliquid-mainnet.n.dwellir.com/${process.env.DWELLIR_API_KEY}/info`;
+// allMids, metaAndAssetCtxs, and l2Book are not on the Dwellir proxy — use public endpoint
+const HL_INFO = 'https://api.hyperliquid.xyz/info';
+const post = (body) => fetch(HL_INFO, {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify(body),
+}).then(r => r.json());
 
-// Fetch all key market data in parallel
 const [mids, meta, book] = await Promise.all([
-  fetch(DWELLIR_INFO, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ type: 'allMids' }),
-  }).then(r => r.json()),
-
-  fetch(DWELLIR_INFO, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ type: 'metaAndAssetCtxs' }),
-  }).then(r => r.json()),
-
-  fetch(DWELLIR_INFO, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ type: 'l2Book', coin: 'BTC' }),
-  }).then(r => r.json()),
+  post({ type: 'allMids' }),
+  post({ type: 'metaAndAssetCtxs' }),
+  post({ type: 'l2Book', coin: 'BTC' }),
 ]);
 
 console.log(`BTC mid: $${mids.BTC}`);
@@ -262,22 +251,24 @@ console.log(`BTC book: ${book.levels[0].length} bid levels`);
 ### Funding Rate Monitor
 
 ```javascript
-const DWELLIR_INFO = `https://api-hyperliquid-mainnet.n.dwellir.com/${process.env.DWELLIR_API_KEY}/info`;
-
-const predictions = await fetch(DWELLIR_INFO, {
+// predictedFundings is not proxied — use public endpoint
+const predictions = await fetch('https://api.hyperliquid.xyz/info', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({ type: 'predictedFundings' }),
 }).then(r => r.json());
 
-// Compare Hyperliquid vs other venues
-for (const [coin, venues] of Object.entries(predictions)) {
-  const hlRate = venues.find(v => v.venue === 'Hyperliquid')?.rate;
-  const binanceRate = venues.find(v => v.venue === 'Binance')?.rate;
-  if (hlRate && binanceRate) {
-    const diff = Math.abs(parseFloat(hlRate) - parseFloat(binanceRate));
+// Response is array of [coin, venues] tuples
+// Each venue is [venueName, { fundingRate, nextFundingTime, fundingIntervalHours }]
+for (const [coin, venues] of predictions) {
+  const hl = venues.find(([name]) => name === 'HlPerp');
+  const bin = venues.find(([name]) => name === 'BinPerp');
+  if (hl && bin) {
+    const hlRate = hl[1].fundingRate;
+    const binRate = bin[1].fundingRate;
+    const diff = Math.abs(parseFloat(hlRate) - parseFloat(binRate));
     if (diff > 0.001) {
-      console.log(`${coin}: HL=${hlRate} vs Binance=${binanceRate} (diff: ${diff.toFixed(6)})`);
+      console.log(`${coin}: HL=${hlRate} vs Binance=${binRate} (diff: ${diff.toFixed(6)})`);
     }
   }
 }
@@ -286,7 +277,7 @@ for (const [coin, venues] of Object.entries(predictions)) {
 ### Account Health Monitor
 
 ```javascript
-const DWELLIR_INFO = `https://api-hyperliquid-mainnet.n.dwellir.com/${process.env.DWELLIR_API_KEY}/info`;
+const DWELLIR_INFO = `https://api-hyperliquid-mainnet-info.n.dwellir.com/${process.env.DWELLIR_API_KEY}/info`;
 
 async function checkAccountHealth(userAddress) {
   const state = await fetch(DWELLIR_INFO, {

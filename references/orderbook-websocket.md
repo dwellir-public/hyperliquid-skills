@@ -1,16 +1,15 @@
-# Orderbook WebSocket (Premium — $199/mo)
+# Orderbook WebSocket
 
-Real-time L2 order book data served by Dwellir's [order book server](https://github.com/dwellir-public/hyperliquid-orderbook-server), which reads Hypercore data directly from disk. **WSS only** — HTTP requests are not supported.
+Real-time L2 order book data served by Dwellir's order book server, which reads Hypercore data directly from disk. **WSS only** — HTTP requests are not supported.
 
-3-day free trial available.
+**For current pricing, subscription types, and full documentation, see [Dwellir Order Book Server docs](https://www.dwellir.com/docs/hyperliquid/order-book-server).**
 
 ## Why Dwellir's Orderbook vs Public Hyperliquid
 
 | Feature | Dwellir Orderbook | Public Hyperliquid WS |
 |---------|-------------------|----------------------|
-| **Book depth** | Up to **100 levels** per side (configurable via `n_levels`) | Max 20 levels per side |
-| **Spot markets** | Yes — perpetuals, spot (`@{index}`), and HIP-3 DEX tokens | Perpetuals only on public l2Book |
-| **HIP-3 DEX markets** | Yes — all builder-deployed perp markets | Limited |
+| **Book depth** | Up to **100 levels** per side (configurable via `nLevels`) | Max 20 levels per side |
+| **Market coverage** | Perpetuals, spot (`@{index}`), and HIP-3 DEX tokens | Same — perpetuals, spot, and HIP-3 |
 | **Rate limits** | API key-based, no IP limits | Introducing IP-based rate limits |
 | **L4 full book** | Yes — complete order-level diffs | Not available on public WS |
 | **Infrastructure** | Dedicated edge servers (Singapore, Tokyo) | Shared public endpoint |
@@ -49,15 +48,18 @@ ws.on('open', () => {
   // Subscribe with 100 levels of depth (default: 20, max: 100)
   ws.send(JSON.stringify({
     method: 'subscribe',
-    subscription: { type: 'l2Book', coin: 'ETH', n_levels: 100 }
+    subscription: { type: 'l2Book', coin: 'ETH', nLevels: 100 }
   }));
 });
 
 ws.on('message', (data) => {
-  const update = JSON.parse(data);
-  // update.levels[0] = bids, update.levels[1] = asks
-  // Each level: { px: "price", sz: "size", n: numOrders }
-  console.log('Book update:', update);
+  const msg = JSON.parse(data);
+  if (msg.channel === 'l2Book') {
+    const book = msg.data;
+    // book.levels[0] = bids, book.levels[1] = asks
+    // Each level: { px: "price", sz: "size", n: numOrders }
+    console.log('Book update:', book.coin, book.levels[0].length, 'levels');
+  }
 });
 
 // Subscribe to a spot market
@@ -95,8 +97,9 @@ ws.on('open', () => {
 
 ws.on('message', (data) => {
   const msg = JSON.parse(data);
-  const bestBid = msg.levels[0][0]; // { px, sz, n }
-  const bestAsk = msg.levels[1][0];
+  if (msg.channel !== 'l2Book') return;
+  const bestBid = msg.data.levels[0][0]; // { px, sz, n }
+  const bestAsk = msg.data.levels[1][0];
   const spread = parseFloat(bestAsk.px) - parseFloat(bestBid.px);
   const mid = (parseFloat(bestBid.px) + parseFloat(bestAsk.px)) / 2;
 

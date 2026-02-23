@@ -3,7 +3,7 @@ name: hyperliquid
 description: >
   Hyperliquid L1 reference for Dwellir endpoints — HyperEVM JSON-RPC, Info API proxy,
   gRPC L1 streaming, order book WebSocket, dedicated nodes, and trading patterns.
-  Covers HyperCore trading layer, HyperEVM smart contracts (chain ID 998),
+  Covers HyperCore trading layer, HyperEVM smart contracts (chain ID 999),
   market data queries, perpetuals metadata, spot markets, and best practices.
   Use when working with Hyperliquid, HYPE, HyperEVM, HyperCore,
   perpetual futures, order books, funding rates, or Hyperliquid trading through Dwellir.
@@ -22,26 +22,27 @@ Hyperliquid has two layers:
 
 **HyperCore** — The native trading layer. Fully on-chain perpetual futures and spot order books. Every order, cancellation, trade, and liquidation settles within one block. Handles ~200,000 orders/second with sub-second finality via HyperBFT consensus.
 
-**HyperEVM** — A general-purpose EVM smart contract layer that runs alongside HyperCore. Developers can deploy Solidity contracts that interact with HyperCore's liquidity. Chain ID: **998**. Native gas token: **HYPE**.
+**HyperEVM** — A general-purpose EVM smart contract layer that runs alongside HyperCore. Developers can deploy Solidity contracts that interact with HyperCore's liquidity. Chain ID: **999**. Native gas token: **HYPE**.
 
 Key properties:
 - All order books are fully on-chain — no off-chain matching
 - Sub-second block times with one-block finality
-- Perpetuals support up to 50x leverage
+- Perpetuals support up to 40x leverage (BTC); most assets 3–10x
 - Native spot trading with HIP-3 DEX deployment
 
 ## What Dwellir Provides
 
 Dwellir runs full Hyperliquid infrastructure: the official HL node, plus custom software built by Dwellir and the community for serving specific data channels.
 
-| Endpoint | What It Serves | Protocol | Pricing | Reference |
-|----------|---------------|----------|---------|-----------|
-| **HyperEVM JSON-RPC** | EVM state, smart contracts, blocks | HTTPS + WSS | Base plan | [hyperevm-json-rpc.md](references/hyperevm-json-rpc.md) |
-| **Info API proxy** | Market data, user state, metadata | HTTPS (POST) | Base plan | [info-api.md](references/info-api.md) |
-| **L1 gRPC Gateway** | Hypercore block/fill streaming | gRPC | $299/mo add-on | [grpc-gateway.md](references/grpc-gateway.md) |
-| **Orderbook WebSocket** | Real-time L2/L4 order book data | WSS only | $199/mo add-on | [orderbook-websocket.md](references/orderbook-websocket.md) |
-| **Dedicated Node** (Tokyo) | Full stack, uncapped throughput | All | $1,150/mo | See below |
-| **Dedicated Node** (Testnet) | Full stack for testing | All | $800/mo | See below |
+For current pricing, features, and service details, see [Dwellir Hyperliquid docs](https://www.dwellir.com/docs/hyperliquid) and [Pricing](https://www.dwellir.com/docs/hyperliquid/pricing).
+
+| Endpoint | What It Serves | Protocol | Reference |
+|----------|---------------|----------|-----------|
+| **HyperEVM JSON-RPC** | EVM state, smart contracts, blocks | HTTPS + WSS | [hyperevm-json-rpc.md](references/hyperevm-json-rpc.md) |
+| **Info API proxy** | Market data, user state, metadata | HTTPS (POST) | [info-api.md](references/info-api.md) |
+| **L1 gRPC Gateway** | Hypercore block/fill/orderbook streaming | gRPC | [grpc-gateway.md](references/grpc-gateway.md) |
+| **Orderbook WebSocket** | Real-time L2/L4 order book data | WSS only | [orderbook-websocket.md](references/orderbook-websocket.md) |
+| **Dedicated Node** | Full stack, uncapped throughput | All | See below |
 
 ### What Dwellir Does NOT Proxy
 
@@ -83,19 +84,11 @@ Dwellir runs full Hyperliquid infrastructure: the official HL node, plus custom 
 
 ## Dedicated Nodes
 
-Full Hyperliquid stack on single-tenant infrastructure. No shared rate limits, uncapped throughput.
+Full Hyperliquid stack on single-tenant infrastructure. No shared rate limits, uncapped throughput. Available in Tokyo (mainnet) and testnet configurations.
 
-| Offering | Location | Monthly Price |
-|----------|----------|---------------|
-| Hyperliquid Mainnet | Tokyo | $1,150 |
-| Hyperliquid Testnet | — | $800 |
+A dedicated node includes all Dwellir services (EVM JSON-RPC, Info API, gRPC Gateway, Orderbook Server) on isolated infrastructure.
 
-A dedicated node includes:
-- Official Hyperliquid L1 node (HyperCore + HyperEVM)
-- Nanoreth (EVM JSON-RPC via HTTP + WebSocket)
-- L1 gRPC Gateway (Hypercore streaming)
-- Orderbook Server (L2/L4 book data)
-- REST Server (Info API proxy)
+For current pricing and configuration options, see [Dwellir Hyperliquid Pricing](https://www.dwellir.com/docs/hyperliquid/pricing).
 
 Contact sales or subscribe via [dashboard.dwellir.com](https://dashboard.dwellir.com).
 
@@ -107,7 +100,7 @@ Contact sales or subscribe via [dashboard.dwellir.com](https://dashboard.dwellir
 
 3. **Use Dwellir's Orderbook WebSocket for book data** — it's optimized for order book delivery with edge servers in Singapore and Tokyo.
 
-4. **Batch Info API queries** — fetch `metaAndAssetCtxs` or `spotMetaAndAssetCtxs` in one call rather than per-asset queries.
+4. **Batch Info API queries** — fetch combined endpoints like `metaAndAssetCtxs` (via public API) rather than per-asset queries. Check [Info API docs](https://www.dwellir.com/docs/hyperliquid/info-endpoint) for which types are available on the Dwellir proxy vs public endpoint.
 
 5. **Cache metadata** — `meta`, `spotMeta`, and `perpDexs` are semi-static. Cache for 1-5 minutes.
 
@@ -116,9 +109,9 @@ Contact sales or subscribe via [dashboard.dwellir.com](https://dashboard.dwellir
 ## Documentation Links
 
 - Dwellir Hyperliquid docs: [dwellir.com/docs/hyperliquid](https://www.dwellir.com/docs/hyperliquid)
-- Dwellir L1 gRPC Gateway (source): [github.com/dwellir-public/hyperliquid-l1-gateway](https://github.com/dwellir-public/hyperliquid-l1-gateway)
-- Dwellir Orderbook Server (source): [github.com/dwellir-public/hyperliquid-orderbook-server](https://github.com/dwellir-public/hyperliquid-orderbook-server)
-- Dwellir REST Server (source): [github.com/dwellir-public/hyperliquid-rest-server](https://github.com/dwellir-public/hyperliquid-rest-server)
+- Dwellir L1 gRPC Gateway: contact support@dwellir.com for source access
+- Dwellir Orderbook Server: contact support@dwellir.com for source access
+- Dwellir REST Server: contact support@dwellir.com for source access
 - Hyperliquid API docs: [hyperliquid.gitbook.io](https://hyperliquid.gitbook.io/hyperliquid-docs/for-developers/api)
 - Hyperliquid Python SDK: [github.com/hyperliquid-dex/hyperliquid-python-sdk](https://github.com/hyperliquid-dex/hyperliquid-python-sdk)
 - Dwellir dashboard: [dashboard.dwellir.com](https://dashboard.dwellir.com)

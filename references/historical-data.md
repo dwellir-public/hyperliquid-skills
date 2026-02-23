@@ -1,6 +1,8 @@
 # Hyperliquid Historical Data
 
-Dwellir offers three historical data products for Hyperliquid. Access is not self-service — contact Dwellir to request data.
+Dwellir offers historical data products for Hyperliquid. Access is not self-service — contact Dwellir to request data.
+
+**For current data products, formats, and pricing, see [Dwellir Historical Data docs](https://www.dwellir.com/docs/hyperliquid/historical-data).**
 
 ## Data Products
 
