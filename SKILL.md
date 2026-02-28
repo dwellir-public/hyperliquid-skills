@@ -44,6 +44,23 @@ For current pricing, features, and service details, see [Dwellir Hyperliquid doc
 | **Orderbook WebSocket** | Real-time L2/L4 order book data | WSS only | [orderbook-websocket.md](references/orderbook-websocket.md) |
 | **Dedicated Node** | Full stack, uncapped throughput | All | See below |
 
+### Dwellir CLI
+
+The [Dwellir CLI](https://www.dwellir.com/docs/cli) (`dwellir`) provides terminal access to endpoint discovery, API key management, usage monitoring, and documentation. Useful for quickly finding Hyperliquid endpoint URLs, reading docs without leaving the terminal, and managing keys in CI pipelines. See [dwellir-cli.md](references/dwellir-cli.md).
+
+```bash
+# Find all Hyperliquid endpoints with your API key
+dwellir endpoints search hyperliquid
+
+# Read Hyperliquid docs as markdown
+dwellir docs search hyperliquid
+dwellir docs get hyperliquid/info-endpoint
+
+# Manage API keys and check usage
+dwellir keys list
+dwellir usage summary
+```
+
 ### What Dwellir Does NOT Proxy
 
 **Exchange API**: Order placement, cancellation, transfers, and other write operations require EIP-712 signatures and go directly to `api.hyperliquid.xyz/exchange`. See [native-api.md](references/native-api.md).
@@ -81,6 +98,7 @@ For current pricing, features, and service details, see [Dwellir Hyperliquid doc
 | Place, cancel, or modify orders | [native-api.md](references/native-api.md) |
 | Subscribe to user events, trades, or candle updates | [native-api.md](references/native-api.md) |
 | Access historical trade/fill data | [historical-data.md](references/historical-data.md) |
+| Discover endpoint URLs, manage API keys, or read docs from the terminal | [dwellir-cli.md](references/dwellir-cli.md) |
 
 ## Dedicated Nodes
 
