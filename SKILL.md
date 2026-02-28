@@ -49,7 +49,10 @@ For current pricing, features, and service details, see [Dwellir Hyperliquid doc
 The [Dwellir CLI](https://www.dwellir.com/docs/cli) (`dwellir`) provides terminal access to endpoint discovery, API key management, usage monitoring, and documentation. Useful for quickly finding Hyperliquid endpoint URLs, reading docs without leaving the terminal, and managing keys in CI pipelines. See [dwellir-cli.md](references/dwellir-cli.md).
 
 ```bash
-# Find all Hyperliquid endpoints with your API key
+# Install
+curl -fsSL https://raw.githubusercontent.com/dwellir-public/cli/main/scripts/install.sh | sh
+
+# Find all Hyperliquid endpoints
 dwellir endpoints search hyperliquid
 
 # Read Hyperliquid docs as markdown

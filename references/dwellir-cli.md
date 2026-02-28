@@ -1,10 +1,10 @@
 # Dwellir CLI for Hyperliquid Development
 
+For full CLI documentation, see [dwellir.com/docs/cli](https://www.dwellir.com/docs/cli).
+
 The Dwellir CLI (`dwellir`) gives terminal access to endpoint discovery, API key management, usage monitoring, and documentation -- useful when building on Hyperliquid without leaving the editor or terminal.
 
 Install: `brew install dwellir-public/homebrew-tap/dwellir` (macOS), `yay -S dwellir-cli-bin` (Arch), or `curl -fsSL https://raw.githubusercontent.com/dwellir-public/cli/main/scripts/install.sh | sh`.
-
-Full install options and CLI docs: [dwellir.com/docs/cli](https://www.dwellir.com/docs/cli)
 
 ## Authentication
 
@@ -25,16 +25,8 @@ dwellir auth status
 ## Discover Hyperliquid Endpoints
 
 ```bash
-# List all Hyperliquid endpoints with your API key substituted
+# List all Hyperliquid endpoints (shows chain, protocol, endpoint URL, premium status)
 dwellir endpoints search hyperliquid
-
-# Output:
-#  CHAIN                            PROTOCOL  ENDPOINT
-#  Hyperliquid EVM                  https     https://api-hyperliquid-mainnet-evm.n.dwellir.com/<key>
-#  Hyperliquid EVM                  wss       wss://api-hyperliquid-mainnet-evm.n.dwellir.com/<key>
-#  Hyperliquid HyperCore Info       https     https://api-hyperliquid-mainnet-info.n.dwellir.com/<key>/info
-#  Hyperliquid HyperCore Orderbook  wss       wss://api-hyperliquid-mainnet-orderbook.n.dwellir.com/<key>/ws
-#  Hyperliquid HyperCore gRPC       https     https://api-hyperliquid-mainnet-grpc.n.dwellir.com/<key>
 
 # Get details for a specific chain
 dwellir endpoints get "hyperliquid evm"
@@ -42,6 +34,8 @@ dwellir endpoints get "hyperliquid evm"
 # JSON output for scripting or agent consumption
 dwellir endpoints search hyperliquid --json
 ```
+
+This lists all Hyperliquid endpoints: HyperEVM (https + wss), HyperCore Info, HyperCore Orderbook, and HyperCore gRPC, with `<key>` placeholders for your API key.
 
 ## Search and Read Documentation
 
