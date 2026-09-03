@@ -40,8 +40,8 @@ For current pricing, features, and service details, see [Dwellir Hyperliquid doc
 |----------|---------------|----------|-----------|
 | **HyperEVM JSON-RPC** | EVM state, smart contracts, blocks | HTTPS + WSS | [hyperevm-json-rpc.md](references/hyperevm-json-rpc.md) |
 | **Info API proxy** | Market data, user state, metadata | HTTPS (POST) | [info-api.md](references/info-api.md) |
-| **L1 gRPC Gateway** | Hypercore block/fill/orderbook streaming | gRPC | [grpc-gateway.md](references/grpc-gateway.md) |
-| **Orderbook WebSocket** | Real-time L2/L4 order book data | WSS only | [orderbook-websocket.md](references/orderbook-websocket.md) |
+| **L1 gRPC Gateway** | Hypercore raw feeds + typed market streams (V3; V2 compat) | gRPC + `x-api-key` | [grpc-gateway.md](references/grpc-gateway.md) |
+| **Orderbook WebSocket** | Real-time L2/L4/BBO order book data + trades | WSS only | [orderbook-websocket.md](references/orderbook-websocket.md) |
 | **Dedicated Node** | Full stack, uncapped throughput | All | See below |
 
 ### Dwellir CLI
