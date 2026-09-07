@@ -26,9 +26,12 @@ WSS: wss://api-hyperliquid-mainnet-orderbook.n.dwellir.com/{API_KEY}/ws
 
 | Type | Description |
 |------|-------------|
-| `l2Book` | Aggregated order book with configurable depth (up to 100 levels) |
+| `l2Book` | Aggregated order book with configurable depth (up to 100 levels via `nLevels`, price aggregation via `nSigFigs` 2-5, default 5) |
 | `l4Book` | Full order book with individual order diffs |
-| `trades` | Trade stream (perpetuals and spot when enabled) |
+| `bbo` | Top of book only (best bid/ask), same payload shape as the public `bbo` channel; cheapest way to track price and spread |
+| `trades` | Trade stream (perpetuals and spot when enabled; optional `user` filter for one wallet) |
+
+Full per-type params live in the [docs](https://www.dwellir.com/docs/hyperliquid/order-book-server/websocket-api).
 
 ## Benchmarked Message Rates
 
