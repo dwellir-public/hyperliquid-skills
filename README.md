@@ -46,3 +46,12 @@ Sign up at [dashboard.dwellir.com](https://dashboard.dwellir.com) to get an API 
 ## License
 
 MIT
+
+## Data-focused distribution
+
+`skills/hyperliquid-data/` is the canonical skill for Dwellir plugin directory packages.
+It covers blockchain reads, market data, and streaming application development.
+It excludes trade execution, asset transfers, wallet signing, and automatic trading.
+The root `SKILL.md` remains the general Hyperliquid development reference.
+
+Package maintainers must pin a Git revision and copy this directory unchanged, including its license.
