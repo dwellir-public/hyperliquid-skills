@@ -33,10 +33,12 @@ Check that Dwellir MCP tools are connected. Skills-only installation does not co
 
 1. Call `list_endpoints` to find the network and transport.
 2. Call `list_keys` to select an enabled, non-secret key reference.
-3. For HyperEVM, call `rpc_methods`, then `rpc_call` with a supported read method.
-4. For Info data, use `hyperliquid_info` with a supported query type and its required parameters.
-5. For a short WebSocket sample, use `capture_stream` with the endpoint's supported subscription format.
+3. For HyperEVM, call the exposed read tool, such as `eth_chainId`, `eth_blockNumber`, or `eth_getBalance`.
+4. For Info data, call `hyperliquid_meta`, `hyperliquid_spotMeta`, or the exposed tool for the required query.
+5. For short samples, use `capture_evm_new_heads` for HyperEVM or `capture_hyperliquid_l2_book` with a market `coin` for order books.
 
+Read each tool's input schema before calling it. Pass the selected `endpoint_id` and `key_ref`.
+Each operation has a separate tool. Do not use a generic executor or invent unlisted tools.
 Keep requests bounded. MCP captures stop at 20 messages or 15 seconds.
 Queries and captures consume the connected account's quota.
 If a query is unavailable, report that limitation. Do not silently change providers.
