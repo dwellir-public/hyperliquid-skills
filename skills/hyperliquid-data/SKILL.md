@@ -30,6 +30,8 @@ Discover current endpoint availability and account access before constructing re
 ## Query through MCP
 
 Check that Dwellir MCP tools are connected. Skills-only installation does not connect an account.
+This workflow requires the server update that exposes each operation separately.
+If the named tools are absent, report that the server update is required and stop the MCP query.
 
 1. Call `list_endpoints` to find the network and transport.
 2. Call `list_keys` to select an enabled, non-secret key reference.
